@@ -236,28 +236,37 @@ main {
 }
 
 /* =================================================================
-   Tab 1: Assistant & Live RAG Visualizer Panel
+   Tab 1: Assistant Chat & suggestion container
    ================================================================= */
-.assistant-grid {
+.chat-container-centered {
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+}
+
+.chat-pane {
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 180px);
+  overflow: hidden;
+}
+
+/* =================================================================
+   Tab 1.5: Graph Visualizer Panel Grid
+   ================================================================= */
+.visualizer-grid {
   display: grid;
-  grid-template-columns: 4.5fr 5.5fr;
+  grid-template-columns: 5.5fr 4.5fr;
   gap: 2rem;
   height: 100%;
 }
 
-/* For Patient View, make Chatbot cover the entire width */
-.assistant-grid.patient-view {
-  grid-template-columns: 1fr;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.assistant-grid.patient-view .visualizer-pane {
-  display: none;
-}
-
-/* Chat Pane */
-.chat-pane {
+.visualizer-card {
   background: var(--panel-bg);
   backdrop-filter: blur(12px);
   border: 1px solid var(--border-color);

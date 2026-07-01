@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Cache Elements
   const rolePatientBtn = document.getElementById("role-patient");
   const roleInvigilatorBtn = document.getElementById("role-invigilator");
-  const assistantGrid = document.querySelector(".assistant-grid");
   const tabLinks = document.querySelectorAll(".tab-link");
   const tabPanels = document.querySelectorAll(".tab-panel");
   
@@ -20,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const chatInput = document.getElementById("chat-input");
   const sendBtn = document.getElementById("send-btn");
   const suggestionPills = document.querySelectorAll(".faq-pill");
+  const chatStatusBadge = document.getElementById("chat-status-badge");
   
   // Trace log elements
   const traceLogs = document.getElementById("trace-logs");
@@ -44,28 +44,28 @@ document.addEventListener("DOMContentLoaded", () => {
     if (role === "patient") {
       rolePatientBtn.classList.add("active");
       roleInvigilatorBtn.classList.remove("active");
-      assistantGrid.classList.add("patient-view");
       
       // Gray out advanced tabs in navigation
+      document.getElementById("tab-link-visualizer").classList.add("restricted");
       document.getElementById("tab-link-database").classList.add("restricted");
       document.getElementById("tab-link-code").classList.add("restricted");
       
       // If we are currently on a restricted tab, go back to assistant
-      if (activeTab === "database" || activeTab === "code") {
+      if (activeTab === "visualizer" || activeTab === "database" || activeTab === "code") {
         switchTab("assistant");
       }
       
-      addSystemLog("System switched to Patient View. Developer console and visualizer hidden.");
+      addSystemLog("System switched to Patient View. Developer panels and visualizer hidden.");
     } else {
       roleInvigilatorBtn.classList.add("active");
       rolePatientBtn.classList.remove("active");
-      assistantGrid.classList.remove("patient-view");
       
       // Restore advanced tabs
+      document.getElementById("tab-link-visualizer").classList.remove("restricted");
       document.getElementById("tab-link-database").classList.remove("restricted");
       document.getElementById("tab-link-code").classList.remove("restricted");
       
-      addSystemLog("System switched to Owner/Invigilator View. Developer console and visualizer unlocked.");
+      addSystemLog("System switched to Owner/Invigilator View. Developer panels and visualizer unlocked.");
     }
   }
 
@@ -77,9 +77,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================================================
   function switchTab(tabName) {
     // Check if restricted in patient mode
-    if (currentRole === "patient" && (tabName === "database" || tabName === "code")) {
+    if (currentRole === "patient" && (tabName === "visualizer" || tabName === "database" || tabName === "code")) {
       // Auto upgrade role to show developer features
-      alertToast("Restricted Area: Toggling to Owner/Invigilator mode to view project database and code.");
+      alertToast("Restricted Area: Toggling to Owner/Invigilator mode to view project details, database, and code.");
       setRole("invigilator");
     }
 
@@ -110,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
       loadCodeFile(activeCodeFile);
     }
   }
+
 
   tabLinks.forEach(link => {
     link.addEventListener("click", () => switchTab(link.dataset.tab));
@@ -342,6 +343,10 @@ document.addEventListener("DOMContentLoaded", () => {
       resetGraphVisuals();
       addSystemLog("--- Starting LangGraph StateGraph Execution ---", "system");
       addSystemLog(`[state] Initial State query: "${query}"`, "system");
+      
+      // Update Chat status badge
+      chatStatusBadge.innerText = "Status: Starting Agent Graph...";
+      chatStatusBadge.style.color = "var(--color-teal)";
 
       // 1. START NODE
       setNodeState("start", "active");
@@ -354,6 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // 2. DETECT LANGUAGE NODE
       setEdgeState("start-lang", "inactive");
       setNodeState("langdetect", "active");
+      chatStatusBadge.innerText = "Status: Detecting Language...";
       addSystemLog("Entering Node: detect_language", "node");
       await delay(600);
       // Simulate langdetect
@@ -365,6 +371,8 @@ document.addEventListener("DOMContentLoaded", () => {
       // 3. PLANNER NODE
       setEdgeState("lang-plan", "inactive");
       setNodeState("planner", "active");
+      chatStatusBadge.innerText = "Status: Routing Query...";
+      chatStatusBadge.style.color = "var(--color-indigo)";
       addSystemLog("Entering Node: planner", "node");
       await delay(700);
 
@@ -387,6 +395,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // 4. RETRIEVER NODE
         setEdgeState("plan-retrieve", "inactive");
         setNodeState("retriever", "active");
+        chatStatusBadge.innerText = "Status: Querying Vector Database...";
+        chatStatusBadge.style.color = "var(--color-emerald)";
         addSystemLog("Entering Node: retriever", "node");
         await delay(800);
         
@@ -402,6 +412,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // 5. ANSWERER NODE (with RAG Context)
         setEdgeState("retrieve-answer", "inactive");
         setNodeState("answerer", "active");
+        chatStatusBadge.innerText = "Status: Synthesizing RAG Response...";
+        chatStatusBadge.style.color = "var(--color-teal)";
         addSystemLog("Entering Node: answerer (RAG mode)", "node");
         await delay(900);
         
@@ -419,6 +431,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // 5. ANSWERER NODE (Direct response)
         setEdgeState("plan-direct", "inactive");
         setNodeState("answerer", "active");
+        chatStatusBadge.innerText = "Status: Generating Response...";
+        chatStatusBadge.style.color = "var(--color-teal)";
         addSystemLog("Entering Node: answerer (Direct mode)", "node");
         await delay(800);
         
@@ -436,7 +450,16 @@ document.addEventListener("DOMContentLoaded", () => {
       await delay(300);
       setNodeState("end", "completed");
       
+      chatStatusBadge.innerText = "Status: Response Ready";
+      chatStatusBadge.style.color = "var(--color-emerald)";
+      
       addSystemLog("--- LangGraph Execution Finished successfully ---", "system");
+      
+      setTimeout(() => {
+        chatStatusBadge.innerText = "Status: Ready";
+        chatStatusBadge.style.color = "var(--text-muted)";
+      }, 2500);
+      
       resolve(finalAnswer);
     });
   }

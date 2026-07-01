@@ -46,7 +46,11 @@
     <nav class="nav-tabs">
       <button class="tab-link active" data-tab="assistant" id="tab-link-assistant">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Assistant & Graph
+        Assistant Chat
+      </button>
+      <button class="tab-link" data-tab="visualizer" id="tab-link-visualizer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        Graph Visualizer
       </button>
       <button class="tab-link" data-tab="database" id="tab-link-database">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
@@ -70,16 +74,15 @@
     
     <!-- TAB 1: ASSISTANT PANEL -->
     <div class="tab-panel active" id="assistant-panel">
-      <div class="assistant-grid">
-        
-        <!-- Left Pane: Chatbot interface -->
+      <div class="chat-container-centered">
+        <!-- Chatbot interface -->
         <div class="chat-pane">
           <div class="pane-header">
             <h2>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
               Clinical Reception Assistant
             </h2>
-            <span style="font-size: 0.8rem; color: var(--text-muted);">Model: Groq Llama-3.3</span>
+            <span id="chat-status-badge" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500; transition: color 0.3s;">Status: Ready</span>
           </div>
           
           <div class="chat-messages" id="chat-messages">
@@ -106,13 +109,19 @@
             </button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- TAB 1.5: GRAPH VISUALIZER PANEL -->
+    <div class="tab-panel" id="visualizer-panel">
+      <div class="visualizer-grid">
         
-        <!-- Right Pane: Live RAG Graph & Console Logs (Developer / Invigilator) -->
-        <div class="visualizer-pane">
+        <!-- Live RAG Graph Container -->
+        <div class="visualizer-card">
           <div class="pane-header">
             <h2>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-              LangGraph State Visualizer
+              LangGraph State visualizer
             </h2>
             <span style="font-size: 0.8rem; color: var(--color-teal); font-weight: 500;">Live Execution Graph</span>
           </div>
@@ -176,16 +185,16 @@
               </g>
             </svg>
           </div>
-          
-          <!-- Live console Trace Log -->
-          <div class="trace-pane">
-            <span class="trace-title">Execution Console Trace Log</span>
-            <div class="trace-logs" id="trace-logs">
-              <!-- Logs populated dynamically -->
-            </div>
+        </div>
+        
+        <!-- Live console Trace Log -->
+        <div class="trace-pane">
+          <span class="trace-title">Execution Console Trace Log</span>
+          <div class="trace-logs" id="trace-logs">
+            <!-- Logs populated dynamically -->
           </div>
         </div>
-
+        
       </div>
     </div>
     
