@@ -6,7 +6,9 @@ const MOCK_USERS = [
   { id: 1, name: "Akshay", password: "Messi", role: "patient" },
   { id: 2, name: "sooraj", password: "mister11", role: "doctor" },
   { id: 3, name: "juwel", password: "mister7", role: "doctor" },
-  { id: 4, name: "charles babbage", password: "computer", role: "developer" }
+  { id: 4, name: "charles babbage", password: "computer", role: "developer" },
+  { id: 5, name: "Joseph", password: "mister007", role: "doctor" },
+  { id: 6, name: "Sourav", password: "Mister44", role: "doctor" }
 ];
 
 // Mock Appointments Database

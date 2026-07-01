@@ -233,7 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
       
       const formType = btn.id.replace("modal-tab-", "");
       let targetFormId = "form-new-patient";
-      if (formType === "ret") targetFormId = "form-ret-patient";
+      if (formType === "ret" || formType === "ret-patient") targetFormId = "form-ret-patient";
       else if (formType === "doctor") targetFormId = "form-doctor";
       else if (formType === "dev") targetFormId = "form-dev";
 
@@ -346,7 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (matchedUser) {
       handleLoginSuccess({ name: matchedUser.name, role: "doctor" });
     } else {
-      alert("Invalid Doctor Credentials! Sample: name: sooraj, password: mister11 OR name: juwel, password: mister7");
+      alert("Invalid Doctor Credentials! Sample: sooraj/mister11, juwel/mister7, Joseph/mister007, or Sourav/Mister44");
     }
   });
 
@@ -469,7 +469,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     myBookings.forEach(booking => {
       const row = document.createElement("tr");
-      const docNameReadable = booking.doctorName === "sooraj" ? "Dr. Sooraj (Cardiology)" : "Dr. Juwel (Pediatrics)";
+      let docNameReadable = "";
+      if (booking.doctorName === "sooraj") docNameReadable = "Dr. Sooraj (Cardiology)";
+      else if (booking.doctorName === "juwel") docNameReadable = "Dr. Juwel (Pediatrics)";
+      else if (booking.doctorName === "Joseph") docNameReadable = "Dr. Joseph (Neurology)";
+      else if (booking.doctorName === "Sourav") docNameReadable = "Dr. Sourav (Infectious Diseases)";
+      else docNameReadable = `Dr. ${booking.doctorName.charAt(0).toUpperCase() + booking.doctorName.slice(1)}`;
       
       row.innerHTML = `
         <td>#${booking.id}</td>
@@ -789,13 +794,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function getConversationalResponse(query) {
     const q = query.toLowerCase();
     if (q.includes("hello") || q.includes("hi") || q.includes("hey")) {
-      return "Hello! I am your personal Mayo Clinic clinical assistant. I can answer questions about common medical conditions (such as Hypertension or Diabetes), symptoms (such as fever), prep guidelines, or help you schedule a consultation with our doctors. How can I help you today?";
+      return "Hello! I am your personal JRJS Hospital clinical assistant. I can answer questions about common medical conditions (such as Hypertension or Diabetes), symptoms (such as fever), prep guidelines, or help you schedule a consultation with our doctors. How can I help you today?";
     } else if (q.includes("thank") || q.includes("appreciate")) {
       return "You're very welcome! Let me know if you have any other questions. Have a healthy day!";
     } else if (q.includes("bye") || q.includes("quit") || q.includes("exit")) {
-      return "Goodbye! Thank you for contacting Mayo Clinic. Take care!";
+      return "Goodbye! Thank you for contacting JRJS Hospital. Take care!";
     } else if (q.includes("who are you") || q.includes("what is your name")) {
-      return "I am the Mayo Clinic AI assistant, built to guide patients through clinical FAQs, disease library lookups, and appointment redirections.";
+      return "I am the JRJS Hospital AI assistant, built to guide patients through clinical FAQs, disease library lookups, and appointment redirections.";
     } else {
       return "I do not have specific clinical documents matching your query in my local database, but I can help you direct this query to a doctor. Please contact our main receptionist desk at (555) 0199 for scheduling or further medical advice.";
     }
@@ -961,6 +966,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================================================
   switchTab("home");
   renderPortalDashboard();
-  addSystemLog("Mayo Clinic clinical portal initialized.", "system");
+  addSystemLog("JRJS Hospital clinical portal initialized.", "system");
   addSystemLog("LangGraph RAG simulation engine online.", "system");
 });

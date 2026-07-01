@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mayo Clinic - Portal & Medical Assistant</title>
+  <title>JRJS Hospital - Portal & Medical Assistant</title>
   <meta name="description" content="A clinical portal featuring appointment booking, health library search, AI assistant chat, doctor dashboards, and developer inspection tools.">
   <link rel="stylesheet" href="styles.css?v=1.0.1">
 </head>
@@ -16,11 +16,9 @@
     <div class="header-left">
       <!-- Mayo Clinic Signature Logo Icon & Wordmark -->
       <div class="mayo-logo" id="logo-home">
-        <svg class="logo-shield" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        </svg>
+        <img class="logo-img" src="jrjs_logo.jpg" alt="JRJS Hospital Logo" width="36" height="36" style="border-radius: 50%; object-fit: cover; margin-right: 4px;">
         <div class="logo-text">
-          <span class="brand-name">MAYO CLINIC</span>
+          <span class="brand-name">JRJS Hospital</span>
           <span class="brand-sub">Transforming Care</span>
         </div>
       </div>
@@ -95,6 +93,8 @@
                   <option value="" disabled selected>Choose a physician...</option>
                   <option value="sooraj">Dr. Sooraj (Cardiology Specialist)</option>
                   <option value="juwel">Dr. Juwel (Pediatric Care Specialist)</option>
+                  <option value="Joseph">Dr. Joseph (Neurology Specialist)</option>
+                  <option value="Sourav">Dr. Sourav (Infectious Diseases Specialist)</option>
                 </select>
               </div>
               <div class="form-group-row">
@@ -201,12 +201,12 @@
 
       <!-- Standard Promo Grid (similar to Mayo Clinic home page content) -->
       <section class="promo-section" id="innovations">
-        <h2 class="section-title">Why Choose Mayo Clinic</h2>
+        <h2 class="section-title">Why Choose JRJS Hospital</h2>
         <div class="promo-grid">
           <div class="promo-card">
             <div class="promo-img-placeholder clinical-care"></div>
             <h4>More experience</h4>
-            <p>Every year, more than a million people from all walks of life come to Mayo Clinic for caring, world-class diagnostics and treatment.</p>
+            <p>Every year, more than a million people from all walks of life come to JRJS Hospital for caring, world-class diagnostics and treatment.</p>
           </div>
           <div class="promo-card">
             <div class="promo-img-placeholder research-lab"></div>
@@ -226,7 +226,7 @@
     <div class="tab-panel" id="health-library-panel">
       <div class="db-header-bar">
         <div class="db-title-block">
-          <h2>Mayo Clinic Health Library</h2>
+          <h2>JRJS Hospital Health Library</h2>
           <p>Search medically reviewed diseases, symptoms, and diagnostic tests using keywords. Powered by client-side TF-IDF similarity indexing.</p>
         </div>
         
@@ -252,7 +252,7 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
               </svg>
-              Mayo Clinic personal AI assistant
+              JRJS Hospital personal AI assistant
             </h2>
             <span id="chat-status-badge" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500; transition: color 0.3s;">Status: Ready</span>
           </div>
@@ -260,7 +260,7 @@
           <div class="chat-messages" id="chat-messages">
             <div class="message bot">
               <div class="message-bubble">
-                Hello! I am your Mayo Clinic clinical assistant. I can answer questions about common medical conditions (like Hypertension or Diabetes), symptoms (like a High Fever), prep instructions (like blood test fasting or ultrasound guides), or help you schedule a consultation with our doctors. How can I help you today?
+                Hello! I am your JRJS Hospital clinical assistant. I can answer questions about common medical conditions (like Hypertension or Diabetes), symptoms (like a High Fever), prep instructions (like blood test fasting or ultrasound guides), or help you schedule a consultation with our doctors. How can I help you today?
               </div>
               <span class="msg-meta">AI Assistant • Just now</span>
             </div>
