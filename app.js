@@ -442,7 +442,7 @@ document.addEventListener("DOMContentLoaded", () => {
       date: dateVal,
       time: timeVal,
       reason: reasonVal,
-      status: "Confirmed" // Auto confirm for simulated convenience
+      status: "Pending" // Starts as Pending approval from doctor
     };
 
     appointments.push(newAppointment);
@@ -451,7 +451,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Reset Form
     appointmentForm.reset();
     renderPatientAppointments();
-    alertToast("Appointment requested and confirmed successfully!");
+    alertToast("Appointment request submitted successfully. Status is Pending approval.");
   });
 
   // Render appointments booked by the patient
@@ -482,7 +482,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${booking.date}</td>
         <td>${booking.time}</td>
         <td title="${booking.reason}">${booking.reason.length > 30 ? booking.reason.slice(0, 30) + "..." : booking.reason}</td>
-        <td><span class="status-badge confirmed">${booking.status}</span></td>
+        <td><span class="status-badge ${booking.status.toLowerCase() === 'confirmed' ? 'confirmed' : 'pending'}">${booking.status}</span></td>
       `;
       patientAppointmentsTbody.appendChild(row);
     });
@@ -514,9 +514,18 @@ document.addEventListener("DOMContentLoaded", () => {
         <td title="${booking.reason}">${booking.reason}</td>
         <td>
           <span class="status-badge ${booking.status.toLowerCase() === 'confirmed' ? 'confirmed' : 'pending'}">${booking.status}</span>
+          ${booking.status === 'Pending' ? `<button class="table-action-btn confirm-appt-btn" data-id="${booking.id}" style="background-color: var(--color-emerald); margin-left: 0.5rem;" title="Confirm appointment">Confirm</button>` : ''}
           <button class="table-action-btn delete-appt-btn" data-id="${booking.id}" style="margin-left: 0.5rem;" title="Cancel appointment">Cancel</button>
         </td>
       `;
+      
+      // Wire confirm appt button if present
+      const confirmBtn = row.querySelector(".confirm-appt-btn");
+      if (confirmBtn) {
+        confirmBtn.addEventListener("click", () => {
+          confirmAppointment(booking.id);
+        });
+      }
       
       // Wire delete appt button
       row.querySelector(".delete-appt-btn").addEventListener("click", () => {
@@ -525,6 +534,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
       doctorAppointmentsTbody.appendChild(row);
     });
+  }
+
+  // Doctor confirming appointment
+  function confirmAppointment(id) {
+    let appointments = JSON.parse(localStorage.getItem("CLINIC_APPOINTMENTS"));
+    const appt = appointments.find(app => app.id === id);
+    if (appt) {
+      appt.status = "Confirmed";
+    }
+    localStorage.setItem("CLINIC_APPOINTMENTS", JSON.stringify(appointments));
+    renderDoctorAppointments();
+    alertToast("Appointment confirmed successfully.");
   }
 
   // Doctor canceling appointment
