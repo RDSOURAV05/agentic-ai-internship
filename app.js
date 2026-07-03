@@ -662,41 +662,38 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function addSystemLog(text, type = "system") {
-    const log = document.createElement("div");
-    log.className = `log-entry ${type}`;
-    
-    const timestamp = new Date().toISOString().split('T')[1].slice(0, 8);
-    log.innerHTML = `<span style="color: var(--text-muted)">[${timestamp}]</span> ${text}`;
-    
-    traceLogs.appendChild(log);
-    traceLogs.scrollTop = traceLogs.scrollHeight;
+    const containers = document.querySelectorAll("#trace-logs, .trace-logs-chat");
+    containers.forEach(container => {
+      const log = document.createElement("div");
+      log.className = `log-entry ${type}`;
+      
+      const timestamp = new Date().toISOString().split('T')[1].slice(0, 8);
+      log.innerHTML = `<span style="color: var(--text-muted)">[${timestamp}]</span> ${text}`;
+      
+      container.appendChild(log);
+      container.scrollTop = container.scrollHeight;
+    });
   }
 
   // Visualizer Animation Graph Triggers
   function setNodeState(nodeId, state) {
-    const node = document.getElementById(`node-${nodeId}`);
-    if (!node) return;
-    
-    node.classList.remove("active", "completed");
-    if (state === "active") {
-      node.classList.add("active");
-    } else if (state === "completed") {
-      node.classList.add("completed");
-    }
+    const nodes = document.querySelectorAll(`.node-${nodeId}`);
+    nodes.forEach(node => {
+      node.classList.remove("active", "completed");
+      if (state === "active") {
+        node.classList.add("active");
+      } else if (state === "completed") {
+        node.classList.add("completed");
+      }
+    });
   }
 
   function setEdgeState(edgeId, state) {
-    const edge = document.getElementById(`edge-${edgeId}`);
-    const arrow = document.getElementById(`arrow-${edgeId}`);
-    
-    if (edge) {
+    const edges = document.querySelectorAll(`.edge-${edgeId}`);
+    edges.forEach(edge => {
       if (state === "active") edge.classList.add("active");
       else edge.classList.remove("active");
-    }
-    if (arrow) {
-      if (state === "active") arrow.classList.add("active");
-      else arrow.classList.remove("active");
-    }
+    });
   }
 
   function resetGraphVisuals() {
@@ -999,6 +996,26 @@ document.addEventListener("DOMContentLoaded", () => {
       toast.style.animation = "fadeIn 0.3s reverse forwards";
       setTimeout(() => toast.remove(), 300);
     }, 4000);
+  }
+
+  // Chatbot Graph Toggle
+  const toggleChatGraphBtn = document.getElementById("toggle-chat-graph-btn");
+  const chatContainerLayout = document.getElementById("chat-container-layout");
+  const chatGraphPane = document.getElementById("chat-graph-pane");
+
+  if (toggleChatGraphBtn) {
+    toggleChatGraphBtn.addEventListener("click", () => {
+      const isVisible = !chatGraphPane.classList.contains("hidden");
+      if (isVisible) {
+        chatGraphPane.classList.add("hidden");
+        chatContainerLayout.classList.remove("show-graph");
+        toggleChatGraphBtn.innerText = "Show Graph Execution";
+      } else {
+        chatGraphPane.classList.remove("hidden");
+        chatContainerLayout.classList.add("show-graph");
+        toggleChatGraphBtn.innerText = "Hide Graph Execution";
+      }
+    });
   }
 
   // ===============================================================

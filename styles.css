@@ -869,6 +869,42 @@ main {
   flex-direction: column;
 }
 
+/* Chat layout wrapper */
+.chat-container-layout {
+  max-width: 750px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+  height: calc(100vh - 160px);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chat-container-layout.show-graph {
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+  height: calc(100vh - 160px);
+}
+
+/* Make sure the chat-pane takes full height inside grid */
+.chat-container-layout.show-graph .chat-pane {
+  height: 100%;
+}
+
+.chat-graph-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.chat-graph-pane.hidden {
+  display: none !important;
+}
+
 .chat-pane {
   background: var(--panel-bg);
   border: 1px solid var(--border-color);

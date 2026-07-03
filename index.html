@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JRJS Hospital - Portal & Medical Assistant</title>
   <meta name="description" content="A clinical portal featuring appointment booking, health library search, AI assistant chat, doctor dashboards, and developer inspection tools.">
-  <link rel="stylesheet" href="styles.css?v=1.0.2">
+  <link rel="stylesheet" href="styles.css?v=1.0.3">
 </head>
 <body>
 
@@ -245,8 +245,8 @@
     
     <!-- 3. CHATBOT PANEL -->
     <div class="tab-panel" id="chatbot-panel">
-      <div class="chat-container-centered">
-        <!-- Chatbot interface -->
+      <div class="chat-container-layout" id="chat-container-layout">
+        <!-- Left: Chatbot interface -->
         <div class="chat-pane">
           <div class="pane-header">
             <h2>
@@ -255,7 +255,10 @@
               </svg>
               JRJS Hospital personal AI assistant
             </h2>
-            <span id="chat-status-badge" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500; transition: color 0.3s;">Status: Ready</span>
+            <div class="pane-header-actions" style="display: flex; align-items: center; gap: 1rem;">
+              <span id="chat-status-badge" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500; transition: color 0.3s;">Status: Ready</span>
+              <button id="toggle-chat-graph-btn" class="mayo-btn-secondary" style="font-size: 0.75rem; padding: 0.25rem 0.5rem; line-height: 1.2;">Show Graph Execution</button>
+            </div>
           </div>
           
           <div class="chat-messages" id="chat-messages">
@@ -282,6 +285,85 @@
                 <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
               </svg>
             </button>
+          </div>
+        </div>
+
+        <!-- Right: Graph Visualizer Pane (Collapsible) -->
+        <div class="chat-graph-pane hidden" id="chat-graph-pane">
+          <!-- Live RAG Graph Container -->
+          <div class="visualizer-card" style="padding: 1.25rem;">
+            <div class="pane-header" style="padding: 0.5rem 0; background: transparent; border-bottom: 1px solid var(--border-color);">
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                LangGraph State Visualizer
+              </h2>
+              <span style="font-size: 0.8rem; color: var(--color-teal); font-weight: 500;">Live Execution Graph</span>
+            </div>
+            
+            <!-- SVG Execution Graph -->
+            <div class="visualizer-container" style="padding: 0.5rem; background: rgba(7, 11, 20, 0.6); margin-top: 0.75rem;">
+              <svg class="graph-svg" viewBox="0 0 500 350">
+                <defs>
+                  <!-- Arrow definition for tracer lines -->
+                  <marker id="arrow-chat" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#475569" class="edge-arrow-head"/>
+                  </marker>
+                </defs>
+
+                <!-- Node connections (Tracer Edges) -->
+                <path class="graph-edge edge-start-lang" d="M 250,48 L 250,75" marker-end="url(#arrow-chat)" />
+                <path class="graph-edge edge-lang-plan" d="M 250,116 L 250,140" marker-end="url(#arrow-chat)" />
+                <path class="graph-edge edge-plan-retrieve" d="M 190,175 Q 140,185 140,210" marker-end="url(#arrow-chat)" />
+                <path class="graph-edge edge-plan-direct" d="M 310,175 Q 360,185 360,210" marker-end="url(#arrow-chat)" />
+                <path class="graph-edge edge-retrieve-answer" d="M 210,233 L 285,233" marker-end="url(#arrow-chat)" />
+                <path class="graph-edge edge-answer-end" d="M 360,251 Q 360,290 268,295" marker-end="url(#arrow-chat)" />
+
+                <!-- Nodes -->
+                <!-- 1. Start Node -->
+                <g class="graph-node node-start">
+                  <circle cx="250" cy="30" r="18" />
+                  <text x="250" y="34" text-anchor="middle">Start</text>
+                </g>
+
+                <!-- 2. Detect Language Node -->
+                <g class="graph-node node-langdetect">
+                  <rect x="175" y="80" width="150" height="36" rx="8" />
+                  <text x="250" y="102" text-anchor="middle">detect_language</text>
+                </g>
+
+                <!-- 3. Planner Node -->
+                <g class="graph-node node-planner planner-routing">
+                  <rect x="175" y="145" width="150" height="40" rx="8" />
+                  <text x="250" y="169" text-anchor="middle">planner (router)</text>
+                </g>
+
+                <!-- 4. Retriever Node -->
+                <g class="graph-node node-retriever">
+                  <rect x="70" y="215" width="140" height="36" rx="8" />
+                  <text x="140" y="237" text-anchor="middle">retriever (FAISS)</text>
+                </g>
+
+                <!-- 5. Answerer Node -->
+                <g class="graph-node node-answerer">
+                  <rect x="290" y="215" width="140" height="36" rx="8" />
+                  <text x="360" y="237" text-anchor="middle">answerer (LLM)</text>
+                </g>
+
+                <!-- 6. End Node -->
+                <g class="graph-node node-end">
+                  <circle cx="250" cy="310" r="18" />
+                  <text x="250" y="314" text-anchor="middle">End</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+          
+          <!-- Live console Trace Log -->
+          <div class="trace-pane" style="height: calc(100% - 370px); min-height: 180px; padding: 1.25rem;">
+            <span class="trace-title" style="margin-bottom: 0.75rem; padding-bottom: 0.35rem;">Execution Console Trace Log</span>
+            <div class="trace-logs trace-logs-chat" style="padding: 0.75rem;">
+              <!-- Logs populated dynamically -->
+            </div>
           </div>
         </div>
       </div>
@@ -325,46 +407,46 @@
                 </defs>
 
                 <!-- Node connections (Tracer Edges) -->
-                <path id="edge-start-lang" d="M 250,48 L 250,75" class="graph-edge" marker-end="url(#arrow)" />
-                <path id="edge-lang-plan" d="M 250,116 L 250,140" class="graph-edge" marker-end="url(#arrow)" />
-                <path id="edge-plan-retrieve" d="M 190,175 Q 140,185 140,210" class="graph-edge" marker-end="url(#arrow)" />
-                <path id="edge-plan-direct" d="M 310,175 Q 360,185 360,210" class="graph-edge" marker-end="url(#arrow)" />
-                <path id="edge-retrieve-answer" d="M 210,233 L 285,233" class="graph-edge" marker-end="url(#arrow)" />
-                <path id="edge-answer-end" d="M 360,251 Q 360,290 268,295" class="graph-edge" marker-end="url(#arrow)" />
+                <path class="graph-edge edge-start-lang" d="M 250,48 L 250,75" marker-end="url(#arrow)" />
+                <path class="graph-edge edge-lang-plan" d="M 250,116 L 250,140" marker-end="url(#arrow)" />
+                <path class="graph-edge edge-plan-retrieve" d="M 190,175 Q 140,185 140,210" marker-end="url(#arrow)" />
+                <path class="graph-edge edge-plan-direct" d="M 310,175 Q 360,185 360,210" marker-end="url(#arrow)" />
+                <path class="graph-edge edge-retrieve-answer" d="M 210,233 L 285,233" marker-end="url(#arrow)" />
+                <path class="graph-edge edge-answer-end" d="M 360,251 Q 360,290 268,295" marker-end="url(#arrow)" />
 
                 <!-- Nodes -->
                 <!-- 1. Start Node -->
-                <g id="node-start" class="graph-node">
+                <g class="graph-node node-start">
                   <circle cx="250" cy="30" r="18" />
                   <text x="250" y="34" text-anchor="middle">Start</text>
                 </g>
 
                 <!-- 2. Detect Language Node -->
-                <g id="node-langdetect" class="graph-node">
+                <g class="graph-node node-langdetect">
                   <rect x="175" y="80" width="150" height="36" rx="8" />
                   <text x="250" y="102" text-anchor="middle">detect_language</text>
                 </g>
 
                 <!-- 3. Planner Node -->
-                <g id="node-planner" class="graph-node planner-routing">
+                <g class="graph-node node-planner planner-routing">
                   <rect x="175" y="145" width="150" height="40" rx="8" />
                   <text x="250" y="169" text-anchor="middle">planner (router)</text>
                 </g>
 
                 <!-- 4. Retriever Node -->
-                <g id="node-retriever" class="graph-node">
+                <g class="graph-node node-retriever">
                   <rect x="70" y="215" width="140" height="36" rx="8" />
                   <text x="140" y="237" text-anchor="middle">retriever (FAISS)</text>
                 </g>
 
                 <!-- 5. Answerer Node -->
-                <g id="node-answerer" class="graph-node">
+                <g class="graph-node node-answerer">
                   <rect x="290" y="215" width="140" height="36" rx="8" />
                   <text x="360" y="237" text-anchor="middle">answerer (LLM)</text>
                 </g>
 
                 <!-- 6. End Node -->
-                <g id="node-end" class="graph-node">
+                <g class="graph-node node-end">
                   <circle cx="250" cy="310" r="18" />
                   <text x="250" y="314" text-anchor="middle">End</text>
                 </g>
@@ -522,8 +604,8 @@
   <!-- =================================================================
        SCRIPTS IMPORT
        ================================================================= -->
-  <script src="database.js?v=1.0.2"></script>
-  <script src="python_code.js?v=1.0.2"></script>
-  <script src="app.js?v=1.0.2"></script>
+  <script src="database.js?v=1.0.3"></script>
+  <script src="python_code.js?v=1.0.3"></script>
+  <script src="app.js?v=1.0.3"></script>
 </body>
 </html>
