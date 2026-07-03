@@ -55,8 +55,8 @@ const MEDICAL_FAQ_DATABASE = [
   {
     id: 3,
     category: "Symptoms",
-    title: "High Fever & Influenza (Flu) Symptoms",
-    content: "Influenza is a viral infection that attacks your respiratory system. Symptoms include a high fever (typically above 100.4°F / 38°C), aching muscles, chills, sweats, headache, dry cough, fatigue, and nasal congestion. Treatment includes rest, fluid intake, and over-the-counter pain relievers. Seek immediate emergency care for breathing difficulties or temperatures exceeding 103°F (39.4°C).",
+    title: "High Fever, Sore Throat & Influenza Symptoms",
+    content: "Influenza is a viral infection that attacks your respiratory system. Symptoms include a high fever (typically above 100.4°F / 38°C), sore throat, throat pain, aching muscles, chills, sweats, headache, dry cough, fatigue, and nasal congestion. Treatment includes rest, fluid intake, and over-the-counter pain relievers. Seek immediate emergency care for breathing difficulties or temperatures exceeding 103°F (39.4°C).",
     source: "Mayo Clinic Infectious Diseases",
     page: 9,
     vector: [0.45, 0.76, -0.12, 0.33, -0.91, -0.22, 0.65, 0.04]
@@ -105,6 +105,15 @@ const MEDICAL_FAQ_DATABASE = [
     source: "Clinic Billing & Admin Manual",
     page: 3,
     vector: [-0.59, 0.25, 0.44, -0.71, 0.38, 0.08, -0.63, 0.67]
+  },
+  {
+    id: 9,
+    category: "Symptoms",
+    title: "Sore Throat (Throat Pain) & Pharyngitis",
+    content: "Sore throat is pain, scratchiness or irritation of the throat that often worsens when you swallow. The most common cause of a sore throat (pharyngitis) is a viral infection, such as a cold or the flu. A sore throat caused by a virus resolves on its own. Strep throat (streptococcal infection), a less common type of sore throat caused by bacteria, requires treatment with antibiotics to prevent complications.",
+    source: "Mayo Clinic ENT Department",
+    page: 12,
+    vector: [0.38, 0.12, -0.65, 0.22, 0.45, -0.71, 0.81, 0.33]
   }
 ];
 
