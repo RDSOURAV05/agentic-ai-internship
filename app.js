@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalTabNewPatient = document.getElementById("modal-tab-new-patient");
   const modalTabRetPatient = document.getElementById("modal-tab-ret-patient");
   const modalTabDev = document.getElementById("modal-tab-dev");
-  const authForms = document.querySelectorAll(".auth-form");
+  const authForms = authModal.querySelectorAll(".auth-form");
   const modalTabBtns = document.querySelectorAll(".modal-tab-btn");
   
   // Doctor Auth Modal Elements
@@ -209,6 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function openDoctorAuth() {
+    formDoctor.classList.add("active");
     doctorAuthModal.classList.add("active");
   }
 
