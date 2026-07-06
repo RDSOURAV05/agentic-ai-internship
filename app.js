@@ -7,6 +7,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // 1. Initial State & LocalStorage Setup
   // ===============================================================
   let currentUser = null; // Stores currently logged-in user object {name, role}
+  const savedUser = sessionStorage.getItem("currentUser") || localStorage.getItem("currentUser");
+  if (savedUser) {
+    try {
+      currentUser = JSON.parse(savedUser);
+    } catch(e) {
+      currentUser = null;
+    }
+  }
   let activeTab = "home";
   let activeCodeFile = "agent.py";
   let activeLabSubtab = "visualizer";
@@ -263,6 +271,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // Login handler
   function handleLoginSuccess(user) {
     currentUser = user;
+    sessionStorage.setItem("currentUser", JSON.stringify(user));
+    sessionStorage.setItem("role", user.role);
+    localStorage.setItem("currentUser", JSON.stringify(user));
+    localStorage.setItem("role", user.role);
     closeAuth();
     closeDoctorAuth();
     
@@ -384,6 +396,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Logout handler
   logoutBtn.addEventListener("click", () => {
     currentUser = null;
+    sessionStorage.clear();
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("role");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     headerAuthActions.classList.remove("hidden");
     userProfileBadge.classList.add("hidden");
     navDeveloperLab.classList.add("hidden");
