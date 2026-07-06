@@ -388,14 +388,32 @@ document.addEventListener("DOMContentLoaded", () => {
     userProfileBadge.classList.add("hidden");
     navDeveloperLab.classList.add("hidden");
     
-    // Restore home page sections
-    heroBanner.classList.remove("hidden");
-    promoSection.classList.remove("hidden");
+    // Reset chatbot conversation to original welcome message
+    chatMessages.innerHTML = `
+      <div class="message bot">
+        <div class="message-bubble">
+          Hello! I am your JRJS Hospital clinical assistant. I can answer questions about common medical conditions (like Hypertension or Diabetes), symptoms (like a High Fever), prep instructions (like blood test fasting or ultrasound guides), or help you schedule a consultation with our doctors. How can I help you today?
+        </div>
+        <span class="msg-meta">AI Assistant • Just now</span>
+      </div>
+    `;
     
-    // Hide all dashboards
-    patientDashboard.classList.add("hidden");
-    doctorDashboard.classList.add("hidden");
-    developerWelcomeDashboard.classList.add("hidden");
+    // Clear execution trace logs
+    const logs = document.querySelectorAll("#trace-logs, .trace-logs-chat");
+    logs.forEach(l => l.innerHTML = "");
+    
+    // Reset graph visual state
+    resetGraphVisuals();
+    
+    // Reset library searches
+    if (dbSearchInput) dbSearchInput.value = "";
+    renderHealthLibrary();
+    
+    // Reset appointment form inputs
+    if (appointmentForm) appointmentForm.reset();
+    
+    // Update dashboard visibility and elements
+    renderPortalDashboard();
     
     switchTab("home");
     alertToast("Logged out successfully.");
