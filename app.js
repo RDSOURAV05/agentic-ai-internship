@@ -594,14 +594,6 @@ document.addEventListener("DOMContentLoaded", () => {
         card.classList.add("highlighted");
       }
 
-      // Generate Sparkline Bars for visual representation of vector embeddings
-      let sparklineHtml = "";
-      doc.vector.forEach(val => {
-        const heightPercent = Math.round(Math.abs(val) * 100);
-        const directionClass = val < 0 ? "negative" : "";
-        sparklineHtml += `<div class="vector-bar ${directionClass}" style="height: ${heightPercent}%" title="Dim value: ${val}"></div>`;
-      });
-
       card.innerHTML = `
         <div class="db-card-meta">
           <span class="db-category">${doc.category}</span>
@@ -610,16 +602,6 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="db-card-content">
           <h3>${doc.title}</h3>
           <p>${doc.content}</p>
-        </div>
-        <div class="db-card-vector">
-          <span class="vector-label">FAISS Embedded Vector (8d pseudo):</span>
-          <div class="vector-sparkline">
-            ${sparklineHtml}
-          </div>
-        </div>
-        <div class="db-card-score">
-          <span class="score-num">${hasSearch ? doc.score.toFixed(3) : "0.000"}</span>
-          <span class="score-lbl">Similarity</span>
         </div>
       `;
       dbGrid.appendChild(card);
